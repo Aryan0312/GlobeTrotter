@@ -10,6 +10,7 @@ dotenv.config();
 
 import authRoutes from "./routes/authRoutes";
 import rootRoutes from "./routes/rootRoutes";
+import tripRoutes from "./routes/tripRoutes";
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/trip", tripRoutes);
 app.use("/", rootRoutes);
 
 // Global error handler
