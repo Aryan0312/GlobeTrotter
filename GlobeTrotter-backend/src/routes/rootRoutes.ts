@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Test
+ *   description: Test endpoints for API validation
+ */
+
 import {Router} from "express";
 import { allowedRole } from "../middleware/authMiddleware";
 import { testController } from "../controller/test/testController";

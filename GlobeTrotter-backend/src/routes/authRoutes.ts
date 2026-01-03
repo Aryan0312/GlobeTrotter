@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication endpoints
+ */
+
 import {Router} from "express";
 import { handleUserLogin, handleUserSignup } from "../controller/auth/authController";
 const router = Router();

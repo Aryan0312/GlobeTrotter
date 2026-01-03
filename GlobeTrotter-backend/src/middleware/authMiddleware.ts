@@ -15,7 +15,7 @@ declare module "express-serve-static-core" {
  
 
 export function allowedRole(allowedRoles: string[]){
-    return async function (req:Request,res:Response,next:NextFunction) {
+    return function (req:Request,res:Response,next:NextFunction) {
         const user= req.session.user;
         
         if(!user) return res.status(401).json({

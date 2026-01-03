@@ -6,6 +6,119 @@ import { ApiError } from "../../utils/apiError";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { trimName, validateEmail, validatePhone, validateCity, validateCountry } from "../../utils/validators";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     LoginRequest:
+ *       type: object
+ *       required:
+ *         - identifier
+ *         - password
+ *       properties:
+ *         identifier:
+ *           type: string
+ *           description: Email or phone number
+ *           example: "user@example.com"
+ *         password:
+ *           type: string
+ *           description: User password
+ *           example: "password123"
+ *     LoginResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: "Login successful"
+ *         roles:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["USER"]
+ *     RegisterRequest:
+ *       type: object
+ *       required:
+ *         - first_name
+ *         - last_name
+ *         - email
+ *         - phone
+ *         - password
+ *       properties:
+ *         first_name:
+ *           type: string
+ *           example: "John"
+ *         last_name:
+ *           type: string
+ *           example: "Doe"
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: "john.doe@example.com"
+ *         phone:
+ *           type: string
+ *           example: "+1234567890"
+ *         password:
+ *           type: string
+ *           minLength: 6
+ *           example: "password123"
+ *         city:
+ *           type: string
+ *           example: "New York"
+ *         country:
+ *           type: string
+ *           example: "USA"
+ *         additionalInfo:
+ *           type: string
+ *           example: "Travel enthusiast"
+ *     RegisterResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           example: true
+ *         message:
+ *           type: string
+ *           example: "User created successfully"
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ */
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: User login
+ *     description: Authenticate user with email/phone and password
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
+ *       400:
+ *         description: Invalid credentials or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export const handleUserLogin = asyncHandler(async (req: Request, res: Response) => {
   const { identifier, password } = req.body;
   
@@ -17,7 +130,7 @@ export const handleUserLogin = asyncHandler(async (req: Request, res: Response) 
 
   /* ---------- fetch user ---------- */
   const userQuery = `
-    SELECT id, email, password_hash
+    SELECT id, email, password_hash, first_name , last_name
     FROM users
     WHERE email = $1 OR phone = $1
   `;
@@ -65,10 +178,45 @@ export const handleUserLogin = asyncHandler(async (req: Request, res: Response) 
   return res.status(200).json({
     success: true,
     message: "Login successful",
+    first_name: user.first_name,
+    last_name: user.last_name,
     roles
   });
 });
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: User registration
+ *     description: Register a new user with personal information
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterRequest'
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegisterResponse'
+ *       400:
+ *         description: Validation error or invalid input format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       409:
+ *         description: User already exists with this email or phone
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export const handleUserSignup = asyncHandler(async (req: Request, res: Response) => {
   const { first_name, last_name, email, phone, password, city, country, additionalInfo } = req.body;
 

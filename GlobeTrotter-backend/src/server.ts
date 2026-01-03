@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import session from "express-session";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger";
 import { ApiError } from "./utils/apiError";
 
 dotenv.config();
@@ -34,6 +36,8 @@ app.use(session({
 
 app.use(cors());
 
+// Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/health", (_req, res) => {
   res.status(200).json({
@@ -65,6 +69,7 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(` Server running on http://localhost:${PORT}`);
+  console.log(` API Documentation: http://localhost:${PORT}/api-docs`);
 });
 
 
