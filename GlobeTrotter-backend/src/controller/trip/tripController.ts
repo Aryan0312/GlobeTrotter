@@ -1,3 +1,148 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Trip:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         user_id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         start_date:
+ *           type: string
+ *           format: date
+ *         end_date:
+ *           type: string
+ *           format: date
+ *         cover_photo_url:
+ *           type: string
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ */
+
+/**
+ * @swagger
+ * /api/trip:
+ *   post:
+ *     summary: Create a new trip
+ *     tags: [Trips]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - startDate
+ *               - endDate
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *               endDate:
+ *                 type: string
+ *                 format: date
+ *               coverPhotoUrl:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Trip created successfully
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *   get:
+ *     summary: Get all user trips
+ *     tags: [Trips]
+ *     responses:
+ *       200:
+ *         description: List of user trips
+ *       401:
+ *         description: Unauthorized
+ */
+
+/**
+ * @swagger
+ * /api/trip/{id}:
+ *   get:
+ *     summary: Get trip by ID
+ *     tags: [Trips]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Trip details
+ *       404:
+ *         description: Trip not found
+ *       401:
+ *         description: Unauthorized
+ *   put:
+ *     summary: Update trip
+ *     tags: [Trips]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               startDate:
+ *                 type: string
+ *                 format: date
+ *               endDate:
+ *                 type: string
+ *                 format: date
+ *               coverPhotoUrl:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Trip updated successfully
+ *       404:
+ *         description: Trip not found
+ *       401:
+ *         description: Unauthorized
+ *   delete:
+ *     summary: Delete trip
+ *     tags: [Trips]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Trip deleted successfully
+ *       404:
+ *         description: Trip not found
+ *       401:
+ *         description: Unauthorized
+ */
+
 import { Request, Response } from "express";
 import { pool } from "../../config/db";
 import { ApiError } from "../../utils/apiError";

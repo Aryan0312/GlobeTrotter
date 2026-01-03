@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Trips
+ *   description: Trip management endpoints
+ */
+
 import { Router } from "express";
 import {
   createTrip,
