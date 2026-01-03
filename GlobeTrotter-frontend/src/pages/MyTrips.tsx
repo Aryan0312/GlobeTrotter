@@ -145,16 +145,16 @@ export default function MyTrips() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2">
-                    <Link to={`/trip/${trip.id}`} className="flex-1">
+                    <Link to={`/trip/${trip.id}/view`} className="flex-1">
                       <Button variant="outline" size="sm" className="w-full">
                         <Eye className="mr-2 h-4 w-4" />
                         View
                       </Button>
                     </Link>
-                    <Link to={`/trip/${trip.id}/edit`} className="flex-1">
+                    <Link to={`/trip/${trip.id}/builder`} className="flex-1">
                       <Button variant="outline" size="sm" className="w-full">
                         <Edit className="mr-2 h-4 w-4" />
-                        Edit
+                        Plan
                       </Button>
                     </Link>
                     <Button
