@@ -1,23 +1,19 @@
-const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+import { supabase } from '../lib/supabase'
 
-export const uploadToCloudinary = async (file: File): Promise<string> => {
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+export const uploadToSupabase = async (file: File): Promise<string> => {
+  const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+  
+  const { data, error } = await supabase.storage
+    .from('trip-images')
+    .upload(fileName, file)
 
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-    {
-      method: 'POST',
-      body: formData,
-    }
-  )
-
-  if (!response.ok) {
-    throw new Error('Failed to upload image')
+  if (error) {
+    throw new Error(`Failed to upload image: ${error.message}`)
   }
 
-  const data = await response.json()
-  return data.secure_url
+  const { data: { publicUrl } } = supabase.storage
+    .from('trip-images')
+    .getPublicUrl(fileName)
+
+  return publicUrl
 }

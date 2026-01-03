@@ -5,10 +5,11 @@ import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
 import Dashboard from '../pages/Dashboard'
 import CreateTrip from '../pages/CreateTrip'
+import EditTrip from '../pages/EditTrip'
+import MyTrips from '../pages/MyTrips'
 import { ProtectedRoute } from '../components/ProtectedRoute'
 
 // Placeholder components
-const Trips = () => <Container className="py-8"><div>Trips Page</div></Container>
 const TripDetail = () => <Container className="py-8"><div>Trip Detail Page</div></Container>
 const Profile = () => <Container className="py-8"><div>Profile Page</div></Container>
 const Search = () => <Container className="py-8"><div>Search Page</div></Container>
@@ -43,8 +44,9 @@ export default function AppRoutes() {
       
       {/* Protected Routes */}
       <Route path="/plan-trip" element={<ProtectedRoute><Container><CreateTrip /></Container></ProtectedRoute>} />
-      <Route path="/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>} />
+      <Route path="/trips" element={<ProtectedRoute><Container><MyTrips /></Container></ProtectedRoute>} />
       <Route path="/trip/:id" element={<ProtectedRoute><TripDetail /></ProtectedRoute>} />
+      <Route path="/trip/:id/edit" element={<ProtectedRoute><Container><EditTrip /></Container></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
       <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />

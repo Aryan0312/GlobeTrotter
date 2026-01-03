@@ -4,6 +4,7 @@ import cors from "cors";
 import session from "express-session";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
+import { corsConfig } from "./config/corsConfig";
 import { ApiError } from "./utils/apiError";
 
 dotenv.config();
@@ -20,6 +21,7 @@ if (!expressSessionSecret) {
   throw new Error("Missing EXPRESS_SESSION_SECRET_KEY in environment variables");
 }
 
+app.use(corsConfig);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -34,8 +36,6 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 4 // 4 hours max age
   }
 }));
-
-app.use(cors());
 
 // Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
