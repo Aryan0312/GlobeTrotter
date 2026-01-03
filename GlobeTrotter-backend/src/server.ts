@@ -50,11 +50,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/trip", tripRoutes);
-<<<<<<< HEAD
-app.use("/api/itinerary-days", itineraryRoutes);
-=======
 app.use("/api", itineraryRoutes);
->>>>>>> 278a5e8 (last commit we are able to complete)
 app.use("/", rootRoutes);
 
 // Global error handler
