@@ -21,8 +21,8 @@ const registerSchema = z.object({
   phone: z.string().min(1, 'Phone number is required'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string().min(1, 'Please confirm your password'),
-  city: z.string().min(1, 'City is required'),
-  country: z.string().min(1, 'Country is required'),
+  city: z.string().optional(),
+  country: z.string().optional(),
   additionalInfo: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -54,7 +54,7 @@ export default function Register() {
   const nextStep = () => {
     // Validate current step fields before proceeding
     const fieldsToValidate = currentStep === 1 
-      ? ['firstName', 'lastName', 'email', 'phone', 'city', 'country']
+      ? ['firstName', 'lastName', 'email', 'phone']
       : ['password', 'confirmPassword']
     
     form.trigger(fieldsToValidate as any).then((isValid) => {
@@ -72,9 +72,14 @@ export default function Register() {
     setIsLoading(true)
     try {
       await authService.register({
+        first_name: data.firstName,
+        last_name: data.lastName,
         email: data.email,
+        phone: data.phone,
         password: data.password,
-        name: `${data.firstName} ${data.lastName}`,
+        city: data.city,
+        country: data.country,
+        additionalInfo: data.additionalInfo,
       })
       toastUtils.success('Account created successfully!')
       navigate('/login')
@@ -186,7 +191,7 @@ export default function Register() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="city">City *</Label>
+                    <Label htmlFor="city">City</Label>
                     <Input
                       id="city"
                       placeholder="New York"
@@ -201,7 +206,7 @@ export default function Register() {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="country">Country *</Label>
+                    <Label htmlFor="country">Country</Label>
                     <Input
                       id="country"
                       placeholder="United States"

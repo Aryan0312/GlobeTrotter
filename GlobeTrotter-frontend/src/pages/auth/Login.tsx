@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -23,6 +23,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuth()
+  const navigate = useNavigate()
   
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -35,9 +36,13 @@ export default function Login() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true)
     try {
-      const response = await authService.login(data)
-      login(response.token, response.user)
+      const response = await authService.login({
+        identifier: data.email,
+        password: data.password
+      })
+      login(response.user)
       toastUtils.success('Welcome back!')
+      navigate('/')
     } catch (error) {
       toastUtils.error('Invalid email or password')
     } finally {

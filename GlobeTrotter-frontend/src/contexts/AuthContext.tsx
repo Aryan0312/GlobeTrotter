@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 interface User {
   id: string
-  email: string
+  identifier: string
   name: string
   role: 'user' | 'admin'
 }
@@ -15,7 +15,7 @@ interface AuthState {
 }
 
 interface AuthContextType extends AuthState {
-  login: (token: string, user: User) => void
+  login: (user: User) => void
   logout: () => void
 }
 
@@ -30,36 +30,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore auth state on app load
   useEffect(() => {
-    const token = localStorage.getItem('auth_token')
     const userData = localStorage.getItem('auth_user')
     
-    if (token && userData) {
+    if (userData) {
       try {
         const user = JSON.parse(userData)
         setState({
           isAuthenticated: true,
           user,
-          token,
+          token: null,
         })
       } catch {
-        localStorage.removeItem('auth_token')
         localStorage.removeItem('auth_user')
       }
     }
   }, [])
 
-  const login = (token: string, user: User) => {
-    localStorage.setItem('auth_token', token)
+  const login = (user: User) => {
     localStorage.setItem('auth_user', JSON.stringify(user))
     setState({
       isAuthenticated: true,
       user,
-      token,
+      token: null,
     })
   }
 
   const logout = () => {
-    localStorage.removeItem('auth_token')
     localStorage.removeItem('auth_user')
     setState({
       isAuthenticated: false,

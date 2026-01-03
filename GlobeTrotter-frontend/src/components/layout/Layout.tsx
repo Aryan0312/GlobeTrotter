@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { SkipToMain } from '@/lib/accessibility'
 import { usePreferences } from '@/contexts/PreferencesContext'
@@ -9,6 +10,10 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const { preferences } = usePreferences()
+  const location = useLocation()
+  
+  // Hide navbar on auth pages
+  const hideNavbar = ['/login', '/register'].includes(location.pathname)
 
   // Apply theme on mount and preference change
   useEffect(() => {
@@ -22,7 +27,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       <SkipToMain />
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <main id="main-content" className="flex-1">
         {children}
       </main>
