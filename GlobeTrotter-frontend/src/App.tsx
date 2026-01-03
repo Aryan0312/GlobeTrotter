@@ -1,10 +1,29 @@
-import { Button } from "@/components/ui/button"
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import { TripsProvider } from './contexts/TripsContext'
+import { ActiveTripProvider } from './contexts/ActiveTripContext'
+import { PreferencesProvider } from './contexts/PreferencesContext'
+import { CommunityProvider } from './contexts/CommunityContext'
+import { Layout } from './components/layout'
+import AppRoutes from './routes/AppRoutes'
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
-    </div>
+    <AuthProvider>
+      <PreferencesProvider>
+        <TripsProvider>
+          <ActiveTripProvider>
+            <CommunityProvider>
+              <BrowserRouter>
+                <Layout>
+                  <AppRoutes />
+                </Layout>
+              </BrowserRouter>
+            </CommunityProvider>
+          </ActiveTripProvider>
+        </TripsProvider>
+      </PreferencesProvider>
+    </AuthProvider>
   )
 }
 

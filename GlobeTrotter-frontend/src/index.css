@@ -120,4 +120,24 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  
+  /* Touch-friendly interactive elements */
+  button, [role="button"], input, select, textarea {
+    @apply min-h-[44px];
+  }
+  
+  /* Responsive text sizes */
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  /* Mobile-first spacing */
+  .spacing-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
 }
