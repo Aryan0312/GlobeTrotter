@@ -15,7 +15,7 @@ import { authService } from '@/services/auth.service'
 import { toastUtils } from '@/lib/toast-utils'
 
 const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  identifier: z.string().email('Please enter a valid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
@@ -29,7 +29,7 @@ export default function Login() {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      identifier: '',
       password: '',
     },
   })
@@ -38,7 +38,7 @@ export default function Login() {
     setIsLoading(true)
     try {
       const response = await authService.login(data)
-      login(response.token, response.user)
+      login(response.user)
       toastUtils.success('Welcome back!')
     } catch (error) {
       toastUtils.error('Invalid email or password')
@@ -72,17 +72,17 @@ export default function Login() {
           
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="identifier">Email</Label>
               <Input
-                id="email"
+                id="identifier"
                 type="email"
                 placeholder="Enter your email"
                 disabled={isLoading}
-                {...form.register('email')}
+                {...form.register('identifier')}
               />
-              {form.formState.errors.email && (
+              {form.formState.errors.identifier && (
                 <p className="text-sm text-destructive">
-                  {form.formState.errors.email.message}
+                  {form.formState.errors.identifier.message}
                 </p>
               )}
             </div>
